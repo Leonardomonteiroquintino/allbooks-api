@@ -1,27 +1,35 @@
-const bodyParser = require('body-parser')
-const jsonServer = require('json-server')
-const server = jsonServer.create()
-const router = jsonServer.router('./src/data/database.json')
-const publicRoutes = require('./routes/publicRoutes')
-const authenticationMiddleware = require('./middleware/authenticationMiddleware')
+// server.js
 
+const bodyParser = require('body-parser');
+const jsonServer = require('json-server');
+const server = jsonServer.create();
+const router = jsonServer.router('./src/data/database.json');
 
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use(bodyParser.json())
+// Rotas públicas e middleware
+const publicRoutes = require('./routes/publicRoutes');
+const authenticationMiddleware = require('./middleware/authenticationMiddleware');
+
+// Configurações básicas
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
 server.use(jsonServer.defaults());
 
-server.use('/public', publicRoutes) //rotas na porta 8000
+// Rotas públicas (sem autenticação)
+server.use('/public', publicRoutes);
 
+// Middleware de autenticação para todas as rotas que não sejam públicas
+server.use((req, res, next) => {
+  const isPublic = req.path.startsWith('/public');
+  if (isPublic) {
+    return next();
+  }
+  return authenticationMiddleware(req, res, next);
+});
 
-server.use(/^(?!\/(public|livros|autores|categorias)).*$/, authenticationMiddleware);
+// Rotas protegidas (livros, autores, categorias, etc.)
+server.use(router);
 
-server.use(router) //rotas na prota 3000
-
+// Inicializa o servidor
 server.listen(8000, () => {
-<<<<<<< HEAD
-  console.log("Boas-vindas a API do AllBooks")
-  console.log("API disponível através da url http://localhost:8000")
-=======
-  console.log("Acesse essa API em http://localhost:8000")
->>>>>>> ebec7e3ae2465b56dc9ccf4de1f2b05b7543faa7
-})
+  console.log('🚀 API AllBooks rodando em http://localhost:8000');
+});
