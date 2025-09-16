@@ -71,3 +71,7 @@ E então, adicionar este mesmo token ao header das próximas requisições:
 ```
 Authorization: Bearer <ACCESS_TOKEN>
 ```
+
+## Sobre o projeto
+
+AllBooks é uma API RESTful para gerenciamento de livros, construída com Node.js e Express. Ideal para estudos de backend e integração com frontends modernos.
