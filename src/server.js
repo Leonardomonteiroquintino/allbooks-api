@@ -31,5 +31,5 @@ server.use(router);
 
 // Inicializa o servidor
 server.listen(8000, () => {
-  console.log('🚀 API AllBooks rodando em http://localhost:8000');
+  console.log(“API disponível em http://localhost:8000”);
 });
